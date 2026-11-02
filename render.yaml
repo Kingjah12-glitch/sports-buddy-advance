@@ -1,0 +1,20 @@
+# Render blueprint: OPTIONAL live API. The website works without it (static mode, see docs/config.js).
+services:
+  - type: web
+    name: sports-buddy-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: API_FOOTBALL_KEY
+        sync: false            # type it in the Render dashboard; never put it in the repo
+      - key: ALLOWED_ORIGINS
+        value: https://YOUR-GITHUB-USERNAME.github.io     # <- change this
+      - key: API_DAILY_BUDGET
+        value: "25"            # hard cap on provider calls per day for this server
+      - key: API_MAX_PER_MINUTE
+        value: "4"
